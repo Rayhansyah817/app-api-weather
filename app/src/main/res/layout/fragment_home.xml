@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".HomeFragment">
+
+    <TextView
+        android:id="@+id/txtTempat"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tempatnya"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginTop="32dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/txtHariIni"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=", Cuaca Hari Ini"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/txtTempat"
+        app:layout_constraintTop_toTopOf="@+id/txtTempat" />
+
+    <ImageView
+        android:id="@+id/imgCuaca"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtTempat"
+        app:srcCompat="@drawable/ic_launcher_background" />
+
+    <TextView
+        android:id="@+id/txtKota"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:layout_marginStart="16dp"
+        android:text="Kota Cuaca"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/txtSuhu"
+        app:layout_constraintStart_toEndOf="@id/imgCuaca"
+        app:layout_constraintTop_toTopOf="@id/imgCuaca" />
+
+    <TextView
+        android:id="@+id/txtSuhu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="50dp"
+        android:text="Suhu Cuaca"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/imgCuaca"
+        app:layout_constraintStart_toStartOf="@+id/txtKota"
+        app:layout_constraintTop_toBottomOf="@+id/txtKota" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imgCuaca"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
