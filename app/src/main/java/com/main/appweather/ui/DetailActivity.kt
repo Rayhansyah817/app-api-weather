@@ -1,10 +1,7 @@
-package com.main.appweather
+package com.main.appweather.ui
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.main.appweather.databinding.ActivityDetailBinding
 
 class DetailActivity : AppCompatActivity() {

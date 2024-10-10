@@ -1,6 +1,14 @@
-package com.main.appweather
+package com.main.appweather.source.weather
 
 import com.google.gson.annotations.SerializedName
+
+data class WeatherResponse(
+    @field:SerializedName("location")
+    val locationData: LocationData,
+
+    @field:SerializedName("current")
+    val currentData: CurrentData
+)
 
 data class LocationData(
     @field:SerializedName("name")
@@ -10,30 +18,39 @@ data class LocationData(
     val region: String,
 
     @field:SerializedName("country")
-    val country: String
+    val country: String,
+
+    @field:SerializedName("lat")
+    val lat: Double,
+
+    @field:SerializedName("lon")
+    val lon: Double
 )
 
 data class CurrentData(
     @field:SerializedName("last_updated")
-    val last_updated: String,
+    val lastUpdated: String,
 
     @field:SerializedName("temp_c")
-    val temp_c: Float,
+    val tempC: Float,
 
     @field:SerializedName("temp_f")
-    val temp_f: Float,
+    val tempF: Float,
 
     @field:SerializedName("wind_mph")
-    val wind_mph: Float,
+    val windMph: Float,
 
     @field:SerializedName("wind_kph")
-    val wind_kph: Float,
+    val windKph: Float,
 
     @field:SerializedName("pressure_in")
-    val pressure_in: Float,
+    val pressureIn: Float,
 
     @field:SerializedName("humidity")
-    val humidity: Int
+    val humidity: Int,
+
+    @SerializedName("condition")
+    val condition: ConditionData
 )
 
 data class ConditionData (

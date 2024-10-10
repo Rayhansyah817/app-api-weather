@@ -1,4 +1,4 @@
-package com.main.appweather
+package com.main.appweather.ui
 
 import android.app.Application
 import androidx.appcompat.app.AppCompatDelegate

@@ -11,14 +11,21 @@ android {
         applicationId = "com.main.appweather"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
+        versionCode = 2
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "BASE_URL", "\"https://api.weatherapi.com/v1/\"")
+            buildConfigField("String", "API_KEY", "\"bf0b3703f9a54994a4e45249240710\"")
+        }
         release {
+            buildConfigField("String", "BASE_URL", "\"https://api.weatherapi.com/v1/\"")
+            buildConfigField("String", "API_KEY", "\"bf0b3703f9a54994a4e45249240710\"")
+
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -35,12 +42,43 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
+        dataBinding = true
     }
 }
 
 dependencies {
 
+    // Retrofit
+    implementation (libs.retrofit)
+
+    // Converter for JSON (Gson)
+    implementation (libs.converter.gson)
+
+    // Rename Response Api
     implementation (libs.gson)
+
+    // OkHttp
+    implementation (libs.okhttp)
+
+    // Logging Interceptor
+    implementation (libs.logging.interceptor)
+
+    // Coroutines
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.0")
+
+    implementation ("com.github.bumptech.glide:glide:4.15.0")
+    annotationProcessor ("com.github.bumptech.glide:compiler:4.15.0")
+
+
+//    // Koin Module
+//    implementation ("io.insert-koin:koin-android:3.4.0")
+//    implementation ("io.insert-koin:koin-androidx-viewmodel:2.2.2")
+//    implementation ("io.insert-koin:koin-core:3.4.0")
+//
+//    implementation ("androidx.fragment:fragment-ktx:1.5.7")
+//    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0")
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
