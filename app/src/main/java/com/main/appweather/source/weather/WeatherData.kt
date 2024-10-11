@@ -49,6 +49,9 @@ data class CurrentData(
     @field:SerializedName("humidity")
     val humidity: Int,
 
+    @field:SerializedName("cloud")
+    val cloud: Int,
+
     @SerializedName("condition")
     val condition: ConditionData
 )
@@ -60,4 +63,16 @@ data class ConditionData (
 
     @field:SerializedName("icon")
     val icon: String
+)
+
+data class FiturWeather(
+    val fitur: String,
+    val icon: Int,
+    val suhu: String
+)
+
+data class ForeCast(
+    val day: String,
+    val icon: String,
+    val suhu: String
 )

@@ -8,8 +8,8 @@ class WeatherRepository(
     private val api: ApiService
 ) {
 
-    fun fetch(): Call<WeatherResponse> {
-        return api.getCurrentWeather(BuildConfig.API_KEY, "Bandung")
+    fun fetch(city: String): Call<WeatherResponse> {
+        return api.getCurrentWeather(BuildConfig.API_KEY, city)
     }
 
 }

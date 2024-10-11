@@ -70,6 +70,12 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.15.0")
     annotationProcessor ("com.github.bumptech.glide:compiler:4.15.0")
 
+    // Gps
+    implementation(libs.play.services.location)
+
+    // Swipe Refresh
+    implementation ("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
+
 
 //    // Koin Module
 //    implementation ("io.insert-koin:koin-android:3.4.0")

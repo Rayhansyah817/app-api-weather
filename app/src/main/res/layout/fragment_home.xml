@@ -1,193 +1,169 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeRefresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/blue_primary"
     android:padding="16dp"
     tools:context=".ui.HomeFragment">
 
-    <TextView
-        android:id="@+id/txtCountry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Country"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <TextView
-        android:id="@+id/txtRegion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Region"
-        android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtCountry"/>
-
-    <TextView
-        android:id="@+id/txtHeadCuaca"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Cuaca Hari Ini"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginTop="64dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtRegion" />
-
-    <ImageView
-        android:id="@+id/imgCuaca"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtHeadCuaca"
-        app:srcCompat="@drawable/ic_launcher_background" />
-
-    <TextView
-        android:id="@+id/txtCuaca"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_marginStart="32dp"
-        android:text="Cuaca!!!"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/txtKota"
-        app:layout_constraintStart_toEndOf="@id/imgCuaca"
-        app:layout_constraintTop_toTopOf="@id/imgCuaca" />
-
-    <TextView
-        android:id="@+id/txtKota"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Kota Cuaca"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/txtSuhu"
-        app:layout_constraintStart_toStartOf="@id/txtCuaca"
-        app:layout_constraintTop_toBottomOf="@id/txtCuaca" />
-
-    <TextView
-        android:id="@+id/txtSuhu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
-        android:text="Suhu Cuaca"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/imgCuaca"
-        app:layout_constraintStart_toStartOf="@+id/txtKota"
-        app:layout_constraintTop_toBottomOf="@+id/txtKota" />
-
-    <TextView
-        android:id="@+id/txtAngin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Angin"
-        android:textSize="14sp"
-        android:layout_marginTop="64dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imgCuaca"
-        app:layout_constraintEnd_toStartOf="@+id/imgTekanan" />
-
-    <ImageView
-        android:id="@+id/imgAngin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_angin"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtAngin"
-        app:layout_constraintEnd_toStartOf="@+id/imgTekanan"/>
-
-    <TextView
-        android:id="@+id/txtSuhuDetail1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="20.0C"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@+id/imgAngin"
-        app:layout_constraintStart_toStartOf="@+id/imgAngin"
-        app:layout_constraintTop_toBottomOf="@+id/imgAngin"/>
-
-    <TextView
-        android:id="@+id/txtTekanan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Tekanan"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@id/imgTekanan"
-        app:layout_constraintEnd_toEndOf="@+id/imgTekanan"
-        app:layout_constraintBottom_toTopOf="@+id/imgTekanan"/>
-
-    <ImageView
-        android:id="@+id/imgTekanan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_tekanan"
-        app:layout_constraintStart_toEndOf="@+id/imgAngin"
-        app:layout_constraintTop_toTopOf="@+id/imgAngin"
-        app:layout_constraintEnd_toStartOf="@+id/imgKelembaban"/>
-
-    <TextView
-        android:id="@+id/txtSuhuDetail2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="20.0C"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@+id/imgTekanan"
-        app:layout_constraintStart_toStartOf="@+id/imgTekanan"
-        app:layout_constraintTop_toBottomOf="@+id/imgTekanan"/>
-
-    <TextView
-        android:id="@+id/txtKelembaban"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Kelembaban"
-        android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="@id/imgKelembaban"
-        app:layout_constraintEnd_toEndOf="@+id/imgKelembaban"
-        app:layout_constraintBottom_toTopOf="@+id/imgKelembaban"/>
-
-    <ImageView
-        android:id="@+id/imgKelembaban"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_lembab"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imgTekanan"
-        app:layout_constraintTop_toTopOf="@+id/imgTekanan" />
-
-    <TextView
-        android:id="@+id/txtSuhuDetail3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="20.0C"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="@+id/imgKelembaban"
-        app:layout_constraintStart_toStartOf="@+id/imgKelembaban"
-        app:layout_constraintTop_toBottomOf="@+id/imgKelembaban"/>
-
-    <TextView
-        android:id="@+id/txtPrediksiCuaca"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Prediksi Cuaca"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginTop="32dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtSuhuDetail1" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/fetchCuacaPredic"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layarUtama"
+        android:background="@color/blue_primary"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/txtPrediksiCuaca"/>
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/txtCountry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Country"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/txtRegion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="Region"
+            android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtCountry"/>
+
+        <TextView
+            android:id="@+id/txtHeadCuaca"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="Cuaca Hari Ini"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginTop="64dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txtRegion" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/bgCuaca"
+            android:layout_width="match_parent"
+            android:layout_height="130dp"
+            android:background="@drawable/ic_bg_cuaca"
+            android:layout_marginTop="16dp"
+            app:layout_constraintCircleRadius="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtHeadCuaca"
+            app:srcCompat="@drawable/ic_launcher_background">
+
+            <ImageView
+                android:id="@+id/imgCuaca"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginStart="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:srcCompat="@drawable/ic_launcher_foreground" />
+
+            <TextView
+                android:id="@+id/txtCuaca"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="Cuaca!!!"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/txtKota"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/imgCuaca" />
+
+            <TextView
+                android:id="@+id/txtKota"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="Kota Cuaca"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@+id/txtSuhu"
+                app:layout_constraintEnd_toEndOf="@+id/txtCuaca"
+                app:layout_constraintTop_toBottomOf="@id/txtCuaca" />
+
+            <TextView
+                android:id="@+id/txtSuhu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Suhu Cuaca"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                app:layout_constraintBottom_toBottomOf="@+id/imgCuaca"
+                app:layout_constraintEnd_toEndOf="@+id/txtKota"
+                app:layout_constraintTop_toBottomOf="@+id/txtKota" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listFitur"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="32dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/bgCuaca"/>
+
+        <TextView
+            android:id="@+id/txtPrediksiCuaca"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="Prediksi Cuaca"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginTop="32dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/listFitur"/>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/listForeCast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/txtPrediksiCuaca"/>
+
+<!--        <include-->
+<!--            android:id="@+id/custom_progress_bar"-->
+<!--            layout="@layout/custom_progress_bar"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:visibility="visible"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"/>-->
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/blue_primary"
+            android:indeterminate="true"
+            android:indeterminateTint="@color/white"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
