@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -29,6 +30,7 @@ import com.main.appweather.R
 import com.main.appweather.databinding.FragmentHomeBinding
 import com.main.appweather.source.weather.FiturWeather
 import com.main.appweather.source.weather.ForeCast
+import com.main.appweather.source.weather.Response
 import com.main.appweather.source.weather.WeatherResponse
 
 class HomeFragment : Fragment() {
@@ -63,21 +65,47 @@ class HomeFragment : Fragment() {
             }
         }
 
-        // Observasi LiveData untuk data cuaca
-        weatherViewModel.weatherData.observe(viewLifecycleOwner) { weatherResponse ->
-            hideCustomProgressBar()
-            weatherResponse?.let {
-
-                // Berhenti menampilkan custom progress bar saat GPS berhasil didapatkan
-                hideCustomProgressBar()
-                updateWeatherUI(it)
-            } ?: run {
-                // Tangani jika data tidak ditemukan
-                binding.txtSuhu.text = ""
-                binding.txtKota.text = "Data tidak ditemukan"
-                binding.txtCuaca.text = ""
+        weatherViewModel.fetchWeather(weatherViewModel.locationData.toString()).observe(viewLifecycleOwner) { response ->
+            if (response != null) {
+                when (response) {
+                    is Response.Loading -> {
+                        binding?.progressBar?.visibility = View.VISIBLE
+                    }
+                    is Response.Success -> {
+                        binding?.progressBar?.visibility = View.GONE
+                        updateWeatherUI(response.data)
+                        Log.d("HomeFragment","${response.data}")
+                    }
+                    is Response.Error -> {
+                        binding?.progressBar?.visibility = View.GONE
+                        Log.d("HomeFragment","${response.error}")
+                        Toast.makeText(
+                            context,
+                            "Terjadi kesalahan: " + response.error,
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
             }
         }
+
+
+//        // Observasi LiveData untuk data cuaca
+//        weatherViewModel.weatherData.observe(viewLifecycleOwner) { weatherResponse ->
+//            hideCustomProgressBar()
+//            weatherResponse?.let {
+//
+//                // Berhenti menampilkan custom progress bar saat GPS berhasil didapatkan
+//                hideCustomProgressBar()
+//                updateWeatherUI(it)
+//            } ?: run {
+//                // Tangani jika data tidak ditemukan
+//                binding.txtSuhu.text = ""
+//                binding.txtKota.text = "Data tidak ditemukan"
+//                binding.txtCuaca.text = ""
+//            }
+//        }
+
     }
 
     private fun checkGpsStatus() {
@@ -162,7 +190,6 @@ class HomeFragment : Fragment() {
                 val location = locationResult.lastLocation
                 if (location != null) {
                     val locationGetGps = "${location.latitude},${location.longitude}"
-                    Log.d("HomeFragment", "Accurate Location: $locationGetGps")
 
                     // Panggil fetchWeather dengan lat dan lon yang baru
                     weatherViewModel.updateLocation(locationGetGps)

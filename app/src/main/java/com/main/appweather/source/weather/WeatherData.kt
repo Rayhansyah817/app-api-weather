@@ -65,6 +65,8 @@ data class ConditionData (
     val icon: String
 )
 
+
+
 data class FiturWeather(
     val fitur: String,
     val icon: Int,
