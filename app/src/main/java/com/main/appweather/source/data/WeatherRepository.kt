@@ -1,4 +1,4 @@
-package com.main.appweather.source.weather
+package com.main.appweather.source.data
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -10,19 +10,14 @@ class WeatherRepository(
     private val apiService: ApiService
 ) {
 
-//    fun fetch(city: String): Call<WeatherResponse> {
-//        return apiService.getCurrentWeather(BuildConfig.API_KEY, city)
-//    }
-
     fun getFetchWeather(city: String): LiveData<Response<WeatherResponse>> = liveData {
         emit(Response.Loading)
         try {
             Log.d("WeatherRepository", "Fetching weather data for city: $city")
             val response = apiService.getCurrentWeather(BuildConfig.API_KEY, city)
-            emit(Response.Success(response))
-            Log.d("HomeFragment","$response")
+            emit(Response.Success(data = response))
         } catch (e: Exception) {
-            Log.d("NewsRepository", "getWeather: ${e.message.toString()} ")
+            Log.d("WeatherRepository", "getWeather: ${e.message.toString()} ")
             emit(Response.Error(e.message.toString()))
         }
     }

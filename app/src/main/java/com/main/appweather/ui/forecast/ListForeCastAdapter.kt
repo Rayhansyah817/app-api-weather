@@ -1,4 +1,4 @@
-package com.main.appweather.ui
+package com.main.appweather.ui.forecast
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,27 +9,28 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.main.appweather.R
-import com.main.appweather.source.weather.FiturWeather
+import com.main.appweather.source.data.ForeCast
+import com.main.appweather.ui.current.HomeFragment
 
-class ListFiturWeatherAdapter(private val listFiturWeather: List<FiturWeather>) : RecyclerView.Adapter<ListFiturWeatherAdapter.ListViewHolder>() {
+class ListForeCastAdapter(private val listForeCast: List<ForeCast>) : RecyclerView.Adapter<ListForeCastAdapter.ListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.adapter_detail_cuaca, parent, false)
+            .inflate(R.layout.adapter_hari, parent, false)
         return ListViewHolder(view)
     }
 
     override fun getItemCount(): Int {
-        return listFiturWeather.size
+        return listForeCast.size
     }
 
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
-        val (fitur, icon, suhu) = listFiturWeather[position]
-        holder.nameFitur.text = fitur
-        holder.suhuFitur.text = suhu
-        Glide.with(holder.iconFitur.context)
+        val (days, icon, suhu) = listForeCast[position]
+        holder.daysForeCast.text = days
+        holder.suhuForeCast.text = suhu
+        Glide.with(holder.iconForeCast.context)
             .load(icon)
-            .into(holder.iconFitur)
+            .into(holder.iconForeCast)
 
         // Set click listener on the itemView
         holder.itemView.setOnClickListener {
@@ -47,8 +48,8 @@ class ListFiturWeatherAdapter(private val listFiturWeather: List<FiturWeather>) 
     }
 
     class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val nameFitur: TextView = itemView.findViewById(R.id.txtFitur)
-        val iconFitur: ImageView = itemView.findViewById(R.id.imgFitur)
-        val suhuFitur: TextView = itemView.findViewById(R.id.txtSuhuFitur)
+        val daysForeCast: TextView = itemView.findViewById(R.id.txtHari)
+        val iconForeCast: ImageView = itemView.findViewById(R.id.imgCuacaHari)
+        val suhuForeCast: TextView = itemView.findViewById(R.id.txtSuhuHari)
     }
 }

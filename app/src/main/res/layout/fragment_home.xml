@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/blue_primary"
     android:padding="16dp"
-    tools:context=".ui.HomeFragment">
+    tools:context=".ui.current.HomeFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layarUtama"

@@ -1,8 +1,7 @@
-package com.main.appweather.ui
+package com.main.appweather.ui.current
 
 import android.Manifest
-import android.app.Activity
-import android.content.Intent
+import android.annotation.SuppressLint
 import android.content.IntentSender
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -28,16 +27,16 @@ import com.google.android.gms.location.Priority
 import com.google.android.gms.location.SettingsClient
 import com.main.appweather.R
 import com.main.appweather.databinding.FragmentHomeBinding
-import com.main.appweather.source.weather.FiturWeather
-import com.main.appweather.source.weather.ForeCast
-import com.main.appweather.source.weather.Response
-import com.main.appweather.source.weather.WeatherResponse
+import com.main.appweather.source.data.FiturWeather
+import com.main.appweather.source.data.ForeCast
+import com.main.appweather.source.data.Response
+import com.main.appweather.source.data.WeatherResponse
+import com.main.appweather.ui.forecast.ListForeCastAdapter
 
 class HomeFragment : Fragment() {
     private val weatherViewModel: WeatherViewModel by viewModels()
     private lateinit var binding: FragmentHomeBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private val REQUEST_CHECK_SETTINGS = 101 // Kode permintaan untuk pengaturan lokasi
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -51,70 +50,44 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         showCustomProgressBar()
-        getPermissionGps()
         checkGpsStatus()
-
-//        showRecyclerListFitur()
-
         swipeRefresh()
 
         // Observasi LiveData dari ViewModel untuk perubahan lokasi
         weatherViewModel.locationData.observe(viewLifecycleOwner) { location ->
             location?.let {
-                weatherViewModel.fetchWeather(it) // Panggil fetchWeather setelah lokasi diupdate
-            }
-        }
-
-        weatherViewModel.fetchWeather(weatherViewModel.locationData.toString()).observe(viewLifecycleOwner) { response ->
-            if (response != null) {
-                when (response) {
-                    is Response.Loading -> {
-                        binding?.progressBar?.visibility = View.VISIBLE
-                    }
-                    is Response.Success -> {
-                        binding?.progressBar?.visibility = View.GONE
-                        updateWeatherUI(response.data)
-                        Log.d("HomeFragment","${response.data}")
-                    }
-                    is Response.Error -> {
-                        binding?.progressBar?.visibility = View.GONE
-                        Log.d("HomeFragment","${response.error}")
-                        Toast.makeText(
-                            context,
-                            "Terjadi kesalahan: " + response.error,
-                            Toast.LENGTH_SHORT
-                        ).show()
+                weatherViewModel.fetchWeather(it).observe(viewLifecycleOwner) { response ->
+                    when (response) {
+                        is Response.Loading -> {  }
+                        is Response.Success -> {
+                            updateWeatherUI(response.data)
+                            hideCustomProgressBar()
+                            Log.d("HomeFragment", "${response.data}")
+                        }
+                        is Response.Error -> {
+                            hideCustomProgressBar()
+                            Log.d("HomeFragment", response.error)
+                            Toast.makeText(
+                                context,
+                                "Terjadi kesalahan: " + response.error,
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
             }
         }
+    }
 
-
-//        // Observasi LiveData untuk data cuaca
-//        weatherViewModel.weatherData.observe(viewLifecycleOwner) { weatherResponse ->
-//            hideCustomProgressBar()
-//            weatherResponse?.let {
-//
-//                // Berhenti menampilkan custom progress bar saat GPS berhasil didapatkan
-//                hideCustomProgressBar()
-//                updateWeatherUI(it)
-//            } ?: run {
-//                // Tangani jika data tidak ditemukan
-//                binding.txtSuhu.text = ""
-//                binding.txtKota.text = "Data tidak ditemukan"
-//                binding.txtCuaca.text = ""
-//            }
-//        }
-
+    private fun locationRequest(): LocationRequest {
+        return LocationRequest.Builder(Priority.PRIORITY_BALANCED_POWER_ACCURACY, 60000)
+            .setWaitForAccurateLocation(true) // Menunggu hingga mendapatkan lokasi yang akurat
+            .build()
     }
 
     private fun checkGpsStatus() {
-        val locationRequest = LocationRequest.Builder(
-            Priority.PRIORITY_HIGH_ACCURACY, 100
-        ).build()
-
         val builder = LocationSettingsRequest.Builder()
-            .addLocationRequest(locationRequest)
+            .addLocationRequest(locationRequest())
             .setAlwaysShow(true) // Menampilkan popup untuk mengaktifkan GPS
 
         val settingsClient: SettingsClient = LocationServices.getSettingsClient(requireActivity())
@@ -136,26 +109,8 @@ class HomeFragment : Fragment() {
                 }
             }
             getPermissionGps()
-            hideCustomProgressBar()
             defaultWeatherUI()
-        }
-    }
-
-    // Menghandle hasil dari startResolutionForResult
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == REQUEST_CHECK_SETTINGS) {
-            when (resultCode) {
-                Activity.RESULT_OK -> {
-                    // GPS sudah aktif, lanjutkan mendapatkan lokasi
-                    getPermissionGps()
-                }
-                Activity.RESULT_CANCELED -> {
-                    // Pengguna menolak untuk menyalakan GPS
-                    hideCustomProgressBar()
-                    defaultWeatherUI()
-                }
-            }
+            hideCustomProgressBar()
         }
     }
 
@@ -175,29 +130,17 @@ class HomeFragment : Fragment() {
                 arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 LOCATION_REQUEST_CODE
             )
-            hideCustomProgressBar() // Sembunyikan progress bar jika gagal mendapatkan izin
             return
         }
 
-        val locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, 5000)
-            .setWaitForAccurateLocation(true) // Menunggu hingga mendapatkan lokasi yang akurat
-            .setMinUpdateIntervalMillis(1000) // Interval waktu minimal antara dua pembaruan lokasi
-            .setMaxUpdateDelayMillis(5000) // Maksimal delay sebelum mendapatkan pembaruan
-            .build()
-
-        fusedLocationClient.requestLocationUpdates(locationRequest, object : LocationCallback() {
+        fusedLocationClient.requestLocationUpdates(locationRequest(), object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult) {
-                val location = locationResult.lastLocation
-                if (location != null) {
+                locationResult.lastLocation?.let { location ->
                     val locationGetGps = "${location.latitude},${location.longitude}"
-
-                    // Panggil fetchWeather dengan lat dan lon yang baru
                     weatherViewModel.updateLocation(locationGetGps)
-                    hideCustomProgressBar()
-                } else {
-                    // Lokasi tidak tersedia, sembunyikan progress bar dan tampilkan UI default
-                    hideCustomProgressBar()
+                } ?: run {
                     defaultWeatherUI()
+                    hideCustomProgressBar()
                 }
             }
         }, Looper.getMainLooper())
@@ -220,6 +163,7 @@ class HomeFragment : Fragment() {
         binding.progressBar.visibility = View.GONE
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateWeatherUI(weather: WeatherResponse) {
         binding.apply {
             txtCountry.text = weather.locationData.country
@@ -235,6 +179,7 @@ class HomeFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun defaultWeatherUI() {
         binding.apply {
             txtCountry.text = ""
@@ -248,62 +193,47 @@ class HomeFragment : Fragment() {
 
     private fun defaultFitur(): List<FiturWeather> {
         return listOf(
-            FiturWeather("Angin",
-                R.drawable.ic_angin,
-                "0"),
-            FiturWeather("Tekanan",
-                R.drawable.ic_tekanan,
-                "0"),
-            FiturWeather("Kelembaban",
-                R.drawable.ic_lembab,
-                "0"),
-            FiturWeather("Awan",
-                R.drawable.ic_lembab,
-                "0")
+            FiturWeather("Angin", R.drawable.ic_angin, "0"),
+            FiturWeather("Tekanan", R.drawable.ic_tekanan, "0"),
+            FiturWeather("Kelembaban", R.drawable.ic_lembab, "0"),
+            FiturWeather("Awan", R.drawable.ic_lembab, "0")
         )
     }
 
     private fun listFitur(weather: WeatherResponse): List<FiturWeather> {
         return listOf(
-            FiturWeather("Angin",
-                R.drawable.ic_angin,
-                "${ weather.currentData.windKph } km/h"),
-            FiturWeather("Tekanan",
-                R.drawable.ic_tekanan,
-                "${weather.currentData.pressureIn}"),
-            FiturWeather("Kelembaban",
-                R.drawable.ic_lembab,
-                "${weather.currentData.humidity}"),
-            FiturWeather("Awan",
-                R.drawable.ic_lembab,
-                "${weather.currentData.cloud}")
+            FiturWeather("Angin", R.drawable.ic_angin, "${weather.currentData.windKph} km/h"),
+            FiturWeather("Tekanan", R.drawable.ic_tekanan, "${weather.currentData.pressureIn}"),
+            FiturWeather("Kelembaban", R.drawable.ic_lembab, "${weather.currentData.humidity}"),
+            FiturWeather("Awan", R.drawable.ic_lembab, "${weather.currentData.cloud}")
         )
     }
 
     private fun showRecyclerListFitur(weather: WeatherResponse) {
-        binding.listFitur.setHasFixedSize(true)
-        binding.listFitur.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        binding.listFitur.adapter = ListFiturWeatherAdapter(listFitur(weather))
+        binding.listFitur.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = ListFiturWeatherAdapter(listFitur(weather))
+        }
     }
 
     private fun listForeCast(): List<ForeCast> {
         return listOf(
-            ForeCast("Senin",
-                "",
-                ""),
-            ForeCast("Selasa",
-                "",
-                "")
+            ForeCast("Senin", "", ""),
+            ForeCast("Selasa", "", "")
         )
     }
 
     private fun showRecyclerListForeCast() {
-        binding.listForeCast.setHasFixedSize(true)
-        binding.listForeCast.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        binding.listForeCast.adapter = ListForeCastAdapter(listForeCast())
+        binding.listForeCast.apply {
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            adapter = ListForeCastAdapter(listForeCast())
+        }
     }
 
     companion object {
         private const val LOCATION_REQUEST_CODE = 100
+        private const val REQUEST_CHECK_SETTINGS = 101
     }
 }

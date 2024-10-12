@@ -1,4 +1,4 @@
-package com.main.appweather.source.weather
+package com.main.appweather.source.data
 
 import com.google.gson.annotations.SerializedName
 
