@@ -82,15 +82,6 @@ dependencies {
     implementation ("androidx.lifecycle:lifecycle-livedata-ktx:2.5.1") //liveData
     implementation ("androidx.room:room-ktx:2.4.3")
 
-
-//    // Koin Module
-//    implementation ("io.insert-koin:koin-android:3.4.0")
-//    implementation ("io.insert-koin:koin-androidx-viewmodel:2.2.2")
-//    implementation ("io.insert-koin:koin-core:3.4.0")
-//
-//    implementation ("androidx.fragment:fragment-ktx:1.5.7")
-//    implementation ("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.0")
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

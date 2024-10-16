@@ -5,7 +5,7 @@
     android:layout_height="150dp"
     android:layout_marginStart="4dp"
     android:layout_marginEnd="4dp"
-    android:background="@drawable/ic_bg_fitur"
+    android:background="@drawable/bg_fitur"
     app:layout_constraintCircleRadius="10dp">
 
     <TextView

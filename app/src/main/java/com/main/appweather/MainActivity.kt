@@ -1,10 +1,11 @@
 package com.main.appweather
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.navigation.findNavController
+import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.main.appweather.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -13,13 +14,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(binding.root)
+        try {
+            setContentView(binding.root)
 
-//        if (savedInstanceState == null) {
-//            supportFragmentManager.beginTransaction()
-//                .replace(R.id.nav_host_fragment, HomeFragment())
-//                .commit()
-//        }
+            val navView: BottomNavigationView = binding.navView
+            val navController = findNavController(R.id.nav_host_fragment)
 
+            navView.setupWithNavController(navController)
+        } catch (e: Exception) {
+            Log.e("MainActivity100", "Error in onCreate: ${e.message}", e)
+        }
     }
 }

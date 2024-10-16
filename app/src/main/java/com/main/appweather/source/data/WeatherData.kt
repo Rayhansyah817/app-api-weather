@@ -7,7 +7,10 @@ data class WeatherResponse(
     val locationData: LocationData,
 
     @field:SerializedName("current")
-    val currentData: CurrentData
+    val currentData: CurrentData,
+
+    @field:SerializedName("forecast")
+    val forecast : ForecastData
 )
 
 data class LocationData(
@@ -65,6 +68,46 @@ data class ConditionData (
     val icon: String
 )
 
+data class ForecastData(
+    @field:SerializedName("forecastday")
+    val forecastDay : List<ForecastDay>
+)
+
+data class ForecastDay (
+    @field:SerializedName("date")
+    val date : String,
+
+    @field:SerializedName("day")
+    val day : DayData,
+
+    @field:SerializedName("hour")
+    val hour: List<HourData>
+)
+
+data class DayData (
+    @field:SerializedName("avgtemp_c")
+    val avgtempC: Float,
+
+    @SerializedName("condition")
+    val condition: ConditionData,
+
+    @field:SerializedName("uv")
+    val uv: Float
+)
+
+data class HourData(
+    @field:SerializedName("time")
+    val time: String,
+
+    @field:SerializedName("temp_c")
+    val tempC: Float,
+
+    @field:SerializedName("temp_f")
+    val tempF: Float,
+
+    @SerializedName("condition")
+    val condition: ConditionData
+)
 
 
 data class FiturWeather(
@@ -73,8 +116,16 @@ data class FiturWeather(
     val suhu: String
 )
 
-data class ForeCast(
+data class RecyclerForecastHour(
     val day: String,
     val icon: String,
     val suhu: String
+)
+
+data class RecyclerForecastDay(
+    val date: String,
+    val suhu: String,
+    val cuaca: String,
+    val icon: String,
+    val uv: String
 )

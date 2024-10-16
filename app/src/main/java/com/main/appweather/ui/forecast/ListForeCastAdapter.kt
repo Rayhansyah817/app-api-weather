@@ -9,10 +9,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.main.appweather.R
-import com.main.appweather.source.data.ForeCast
+import com.main.appweather.source.data.RecyclerForecastHour
 import com.main.appweather.ui.current.HomeFragment
 
-class ListForeCastAdapter(private val listForeCast: List<ForeCast>) : RecyclerView.Adapter<ListForeCastAdapter.ListViewHolder>() {
+class ListForeCastAdapter(private val listForeCast: List<RecyclerForecastHour>) : RecyclerView.Adapter<ListForeCastAdapter.ListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -32,9 +32,7 @@ class ListForeCastAdapter(private val listForeCast: List<ForeCast>) : RecyclerVi
             .load(icon)
             .into(holder.iconForeCast)
 
-        // Set click listener on the itemView
         holder.itemView.setOnClickListener {
-//            Toast.makeText(holder.itemView.context, "Clicked: $name", Toast.LENGTH_SHORT).show()
             val fragment = HomeFragment()
             val fragmentManager =
                 (holder.itemView.context as AppCompatActivity).supportFragmentManager
@@ -43,7 +41,6 @@ class ListForeCastAdapter(private val listForeCast: List<ForeCast>) : RecyclerVi
             fragmentTransaction.addToBackStack(null)  // Opsional: menambahkan ke back stack jika diperlukan
             fragmentTransaction.commit()
         }
-
 
     }
 

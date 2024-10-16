@@ -13,7 +13,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.android.gms.common.api.ResolvableApiException
@@ -28,21 +28,22 @@ import com.google.android.gms.location.SettingsClient
 import com.main.appweather.R
 import com.main.appweather.databinding.FragmentHomeBinding
 import com.main.appweather.source.data.FiturWeather
-import com.main.appweather.source.data.ForeCast
+import com.main.appweather.source.data.RecyclerForecastHour
 import com.main.appweather.source.data.Response
 import com.main.appweather.source.data.WeatherResponse
 import com.main.appweather.ui.forecast.ListForeCastAdapter
 
 class HomeFragment : Fragment() {
-    private val weatherViewModel: WeatherViewModel by viewModels()
-    private lateinit var binding: FragmentHomeBinding
+    private val weatherViewModel: WeatherViewModel by activityViewModels()
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity()) // Inisialisasi lokasi
         return binding.root
     }
@@ -57,24 +58,28 @@ class HomeFragment : Fragment() {
         weatherViewModel.locationData.observe(viewLifecycleOwner) { location ->
             location?.let {
                 weatherViewModel.fetchWeather(it).observe(viewLifecycleOwner) { response ->
-                    when (response) {
-                        is Response.Loading -> {  }
-                        is Response.Success -> {
-                            updateWeatherUI(response.data)
-                            hideCustomProgressBar()
-                            Log.d("HomeFragment", "${response.data}")
-                        }
-                        is Response.Error -> {
-                            hideCustomProgressBar()
-                            Log.d("HomeFragment", response.error)
-                            Toast.makeText(
-                                context,
-                                "Terjadi kesalahan: " + response.error,
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    }
+                    handleResponse(response)
                 }
+            }
+        }
+    }
+
+    private fun handleResponse(response: Response<WeatherResponse>) {
+        when (response) {
+            is Response.Loading -> {  }
+            is Response.Success -> {
+                updateWeatherUI(response.data)
+                hideCustomProgressBar()
+                Log.d("HomeFragment", "${response.data}")
+            }
+            is Response.Error -> {
+                hideCustomProgressBar()
+                Log.d("HomeFragment", response.error)
+                Toast.makeText(
+                    context,
+                    "Terjadi kesalahan: " + response.error,
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
@@ -140,7 +145,6 @@ class HomeFragment : Fragment() {
                     weatherViewModel.updateLocation(locationGetGps)
                 } ?: run {
                     defaultWeatherUI()
-                    hideCustomProgressBar()
                 }
             }
         }, Looper.getMainLooper())
@@ -175,7 +179,7 @@ class HomeFragment : Fragment() {
                 .load("https:${weather.currentData.condition.icon}")
                 .into(binding.imgCuaca)
             showRecyclerListFitur(weather)
-            showRecyclerListForeCast()
+            showRecyclerListForeCast(weather)
         }
     }
 
@@ -217,18 +221,26 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun listForeCast(): List<ForeCast> {
-        return listOf(
-            ForeCast("Senin", "", ""),
-            ForeCast("Selasa", "", "")
-        )
+    private fun listForecastHome(weather: WeatherResponse): List<RecyclerForecastHour> {
+        val firstForcastDay = weather.forecast.forecastDay[0]
+            // Map setiap data jam ke dalam model RecyclerForecast
+        return firstForcastDay.hour.map { hourData ->
+            RecyclerForecastHour(
+                // Waktu
+                hourData.time.substring(11),
+                // Kondisi cuaca
+                "https:${hourData.condition.icon}",
+                // Suhu
+                "${hourData.tempC}°C"
+            )
+        }
     }
 
-    private fun showRecyclerListForeCast() {
-        binding.listForeCast.apply {
+    private fun showRecyclerListForeCast(weather: WeatherResponse) {
+        binding.listForecast.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            adapter = ListForeCastAdapter(listForeCast())
+            adapter = ListForeCastAdapter(listForecastHome(weather))
         }
     }
 
@@ -236,4 +248,11 @@ class HomeFragment : Fragment() {
         private const val LOCATION_REQUEST_CODE = 100
         private const val REQUEST_CHECK_SETTINGS = 101
     }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
 }

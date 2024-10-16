@@ -55,7 +55,7 @@
             android:id="@+id/bgCuaca"
             android:layout_width="match_parent"
             android:layout_height="130dp"
-            android:background="@drawable/ic_bg_cuaca"
+            android:background="@drawable/bg_cuaca"
             android:layout_marginTop="16dp"
             app:layout_constraintCircleRadius="10dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -123,7 +123,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/white"
-            android:text="Prediksi Cuaca"
+            android:text="Perkiraan Cuaca per Jam"
             android:textSize="24sp"
             android:textStyle="bold"
             android:layout_marginTop="32dp"
@@ -131,7 +131,7 @@
             app:layout_constraintTop_toBottomOf="@id/listFitur"/>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/listForeCast"
+            android:id="@+id/listForecast"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"

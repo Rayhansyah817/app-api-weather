@@ -5,7 +5,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.main.appweather.R
@@ -30,20 +29,6 @@ class ListFiturWeatherAdapter(private val listFiturWeather: List<FiturWeather>) 
         Glide.with(holder.iconFitur.context)
             .load(icon)
             .into(holder.iconFitur)
-
-        // Set click listener on the itemView
-        holder.itemView.setOnClickListener {
-//            Toast.makeText(holder.itemView.context, "Clicked: $name", Toast.LENGTH_SHORT).show()
-            val fragment = HomeFragment()
-            val fragmentManager =
-                (holder.itemView.context as AppCompatActivity).supportFragmentManager
-            val fragmentTransaction = fragmentManager.beginTransaction()
-            fragmentTransaction.replace(R.id.nav_host_fragment, fragment)
-            fragmentTransaction.addToBackStack(null)  // Opsional: menambahkan ke back stack jika diperlukan
-            fragmentTransaction.commit()
-        }
-
-
     }
 
     class ListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
